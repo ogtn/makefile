@@ -21,9 +21,6 @@ EXE_DEP = $(EXE_OBJ:%.o=%.d)
 
 all: $(EXE)
 
-dbg:
-	@echo $(EXE_DEP)
-
 # Compilation des sources
 # Subtilité du pipe avant la dépendance avec le repertoire:
 # La condition de construction de la regle n'est pas la date
@@ -33,7 +30,7 @@ dbg:
 # La compilation produit au passage un fichier .d qui est un makefile
 # listant les dépendances avec les fichiers inclus
 $(DIR_BIN)/%.o: $(DIR_SRC)/%.c | $(DIR_BIN)
-	$(CC) $(CFLAGS) $(INC) -c -MMD -MP -o $@ $<
+	$(CC) $(CFLAGS) $(INC) -c -MMD -o $@ $<
 
 # Edition de lien pour produire l'executable
 $(EXE): $(LIB) $(EXE_OBJ)
@@ -48,7 +45,7 @@ clean:
 # avec les fichiers inclus
 # Le moins évite à make de gueuler si le fichier n'existe pas,
 # ce qui est le cas après un clean.
-include $(DEP)
+-include $(EXE_DEP)
 
 # Creation des repetoires
 # Utile avec git qui ne gere pas les repetoires vides par exemple
