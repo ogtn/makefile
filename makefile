@@ -16,8 +16,30 @@ EXE = $(DIR_BIN)/$(EXE_NAME)
 EXE_SRC = prout.c \
 		  prout_aussi.c
 
+# Liste des objets et des dependances à partir de la liste des sources
 EXE_OBJ = $(EXE_SRC:%.c=$(DIR_BIN)/%.o)
 EXE_DEP = $(EXE_OBJ:%.o=%.d)
+
+# Nom du fichier de version généré par le makefile
+EXE_VERSION = $(DIR_INC)/version.h
+
+# Numero de version calculé par git en fonction des tag.
+# Au taf lancer un exe avec --version affiche la chaine produite
+EXE_RELEASE := `git describe --tags --dirty`
+
+# Petit hack
+# La variable ne sert à rien, elle n'est utilisée nulle part.
+# Son seul interêt est que l'affectation via := provoque l'appel
+# de la commande shell à l'affectation.
+# Lors d'une affectation avec un simple =, la valeur de la variable est calculée
+# à l'utilisation.
+#
+# La commande met à jour un numero de version issu de git dans un .h
+# Le .h n'est modifié que si nécéssaire, et donc ne provoque pas 
+# la recompilation systèmatique du projet: çaybeau
+IGNORE := $(shell echo -e "/* Ajoute le tag et la revision git */\nconst char *g_version=\"${EXE_RELEASE}\";\n" > $(EXE_VERSION).tmp && \
+                  diff $(EXE_VERSION) $(EXE_VERSION).tmp &> /dev/null || cp $(EXE_VERSION).tmp $(EXE_VERSION) &> /dev/null && \
+                  rm $(EXE_VERSION).tmp)
 
 all: $(EXE)
 
@@ -40,6 +62,11 @@ $(EXE): $(LIB) $(EXE_OBJ)
 clean:
 	@rm -rf $(DIR_BIN)
 	@echo -e "Nettoyage de `basename $(EXE)` \033[1;32mOK\033[0m"
+
+$(VERSION): | $(DIR_INC)
+	@echo -e "//Ajoute le tag et la revision git\nconst char *sirius_version=\"${RELEASE}\";\n" > $@.tmp
+	@diff $@ $@.tmp > /dev/null || cp $@.tmp $@
+	@rm $@.tmp
 
 # Inclusion des makefiles qui contiennent les dépendances
 # avec les fichiers inclus
