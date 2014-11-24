@@ -2,6 +2,9 @@
 # Bon, en fait, pas vraiment. Je m'explique.
 #
 # La liste des .c est à ajouter à la main, dans la variable EXE_SRC
+# Si tu veux un truc auto, remplir la variable avec une commande shell 
+# doit marcher, cf l'exemple de IGNORE pour l'explication sur le :=
+#
 # Le nom de l'exe est à renseigner dans EXE_NAME
 #
 # En gros, au taf, j'ai ça comme arborescence:
@@ -21,9 +24,13 @@
 #
 # Chaque exe à son makefile, qui est très simple:
 # J'y renseigne le nom de l'exe, des flags additionnels, et la liste des .c
-# Et ensuite j'inclus le makefile générique (common.mk), qui est environ ce qui suit
-# Et enfin le makefile à la racine appelle les sous makefiles, et me pond un
-# tgz avec le nom de version qui va bien, et tous les exe dedans
+# Et ensuite j'inclus le makefile générique (common.mk), qui est environ le 
+# contenu du fichier que t'es en train de lire
+# Pour les CFLAGS par exemple, j'ai des trucs particuliers dans le makefile
+# de l'executable, et je fait un += dans common.mk pour y coller les trucs communs...
+# 
+# Et enfin le makefile à la racine appelle les sous makefiles, et pond un
+# tgz avec le nom de version qui va bien, et tous les exe dedans \o/
 
 # Quelques repetoires utiles...
 DIR_SRC = src
