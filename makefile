@@ -1,3 +1,30 @@
+# Voici un petit makefile à peu prêt générique.
+# Bon, en fait, pas vraiment. Je m'explique.
+#
+# La liste des .c est à ajouter à la main, dans la variable EXE_SRC
+# Le nom de l'exe est à renseigner dans EXE_NAME
+#
+# En gros, au taf, j'ai ça comme arborescence:
+# gros projet/
+# ├── bite
+# │   └── makefile
+# ├── common.mk
+# ├── couille
+# │   └── makefile
+# ├── makefile
+# ├── nichon
+# │   └── makefile
+# ├── prout
+# │   └── makefile
+# └── zob
+#     └── makefile
+#
+# Chaque exe à son makefile, qui est très simple:
+# J'y renseigne le nom de l'exe, des flags additionnels, et la liste des .c
+# Et ensuite j'inclus le makefile générique (common.mk), qui est environ ce qui suit
+# Et enfin le makefile à la racine appelle les sous makefiles, et me pond un
+# tgz avec le nom de version qui va bien, et tous les exe dedans
+
 # Quelques repetoires utiles...
 DIR_SRC = src
 DIR_INC = inc
